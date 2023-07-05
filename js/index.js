@@ -6,7 +6,7 @@ const buttonAppt = document.querySelector("#btn-appt");
 const buttonHotel = document.querySelector("#btn-hotel");
 const filters = document.querySelectorAll(".filter");
 
-//functions :
+//functions declaration :
 function clearGallery() {
     document.querySelector(".gallery")
                 .innerHTML = ``;

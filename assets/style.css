@@ -159,6 +159,10 @@ a:hover {
 	font-weight: bold;
 }
 
+.filter:hover {
+	cursor: pointer;
+}
+
 .filter--active {
 	background-color: #1D6154;
 	color: white;
@@ -220,6 +224,10 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+input[type="submit"]:hover {
+	cursor: pointer;
+}
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
@@ -271,4 +279,12 @@ footer nav ul {
 
 .password-forgot {
 	text-decoration: underline;
+	cursor: pointer;
+}
+
+.error-txt {
+	color: red;
+	font-size: 0.8rem;
+	width: 80%;
+	margin-top: 0.5rem;
 }
