@@ -53,6 +53,7 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background-color: #FFFEF8;
+	box-sizing: border-box;
 }
 header {
 	display: flex;
@@ -104,6 +105,7 @@ nav li {
 
 a:hover {
 	color: #B1663C;
+	cursor: pointer;
 }
 .bold{
 	font-weight: bold;
@@ -112,6 +114,7 @@ a:hover {
 #introduction {
 	display: flex;
 	align-items: center;
+	margin-bottom: 1rem;
 }
 #introduction figure {
 	flex: 1
@@ -134,7 +137,54 @@ a:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+}
+
+/**** Adjustments for logged user ****/
+
+#edit-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 3rem;
+	gap: 1rem;
+	background-color: black;
+	color: white;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#btn-publish-changes {
+	margin: 0;
+	height: 60%;
+	color: black;
+	background-color: white;
+	border: none;
+	padding: 0.5rem;
+	font-family: 'Work Sans';
+	font-size: small;
+	font-weight: 300;
+}
+
+#portfolio-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 8rem;
+}
+
+.modifier {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+#modifier-introduction {
+	margin-left: 5%;
 }
 
 /**** Filters added : ****/
@@ -142,15 +192,15 @@ a:hover {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	gap: 0.8em;
-	margin: 3rem 0rem;
+	gap: 1rem;
+	margin: 4rem 0rem;
 }
 
 .filter {
 	display: flex;
 	color: #1D6154;
 	background-color: #FFFEF8;
-	padding: 0.5rem 1rem;
+	padding: 0.5rem 1.5rem;
 	border-radius: 1.5rem;
 	box-shadow: none;
 	border: 1.50px solid #1D6154;
@@ -232,6 +282,105 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+
+/***** Edit modal *****/
+
+.modal {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	width: 50%;
+	height: auto;
+	border: none;
+	border-radius: 10px;
+	padding: 1rem 1.5rem 3rem;
+}
+
+.modal::backdrop {
+	background: rgba(0, 0, 0, 0.6);
+}
+
+#link-add-picture {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+	padding: 1rem 2rem;
+	text-align: center;
+	border-radius: 60px ;
+}
+
+#delete-gallery {
+	font-family: 'Syne';
+	font-weight: normal;
+}
+
+.modal-header {
+	display: flex;
+	width: 100%;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+}
+
+.modal-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	width: 80%;
+	background-color: white;
+}
+
+.modal-title {
+	font-size: x-large;
+	margin-bottom: 2rem;
+}
+
+.x-close:hover {
+	cursor: pointer;
+}
+
+.arrow-prev {
+	cursor: pointer;
+}
+
+.gallery-view {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	padding-bottom: 3rem;
+	border-bottom: 1px solid gray ;
+}
+
+.gallery-view figure {
+	width: 18%;
+}
+
+.card-img {
+	width: 100%;
+}
+
+.gallery-view img {
+	object-fit: cover;
+	height: auto;
+	width: 100%;
+}
+
+.gallery-view p {
+	margin-bottom: 0.5rem;
+}
+
+.form-add-picture {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1rem;
 }
 
 /***** Login page *****/

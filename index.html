@@ -9,16 +9,17 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/64cdd2c6e2.js" crossorigin="anonymous"></script>
 	<script src="js/index.js" type="module" defer></script>
 </head>
 <body>
-<header>
+<header id="header">
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="#portfolio">projets</a></li>
 			<li><a href="#contact">contact</a></li>
-			<li><a href="./login.html">login</a></li>
+			<li id="login-logout"><a id="login" href="./login.html">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -35,8 +36,45 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
+	<dialog id="modal-gallery" href="modal-gallery" class="modal">
+		<div class="modal-header">
+			<i class="x-close fa-solid fa-xmark"></i>
+		</div>
+		<div class="modal-wrapper">
+			<p class="modal-title">Galerie photo</p>
+			<div class="gallery-view">
+			</div>
+			<a id="link-add-picture" class="modal-link" href="#modal-add-project" value="Ajouter une photo">Ajouter une photo</a>
+			<a id="delete-gallery">Supprimer la galerie</a>
+		</div>
+	</dialog>
+	<dialog id="modal-add-project" href="modal-add-project" class="modal">
+		<div class="modal-header">
+			<i class="x-close fa-solid fa-xmark"></i>
+			<i href="#modal-gallery" class="arrow-prev fa-solid fa-arrow-left"></i>
+		</div>
+		<div class="modal-wrapper">
+			<p class="modal-title">Ajout photo</p>
+				<form class="form-add-picture">
+					<label>
+						<input type="file">
+					</label>
+					<label>
+						Titre :
+						<input type="text" title="Titre">
+					</label>
+					<label>
+						Catégorie :
+						<input type="" title="Catégorie">
+					</label>
+				</form>
+			<input type="submit" value="Valider">
+		</div>
+	</dialog>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div id="portfolio-header">
+			<h2>Mes Projets</h2>
+		</div>
 		<div class="filters">
 			<button id="btn-all" class="filter filter--active" name="filterAll" type="button">Tous</button>
 			<button id="btn-object" class="filter" name="filterObject" type="button">Objets</button>
