@@ -297,10 +297,12 @@ footer nav ul {
 	border: none;
 	border-radius: 10px;
 	padding: 1rem 1.5rem 3rem;
+	pointer-events: auto;
 }
 
 .modal::backdrop {
 	background: rgba(0, 0, 0, 0.6);
+	pointer-events: all;
 }
 
 #link-add-picture {
@@ -315,7 +317,7 @@ footer nav ul {
 	border-radius: 60px ;
 }
 
-#delete-gallery {
+#btn-delete-gallery {
 	font-family: 'Syne';
 	font-weight: normal;
 }
@@ -341,21 +343,19 @@ footer nav ul {
 	margin-bottom: 2rem;
 }
 
-.x-close:hover {
+.x-close:hover, .arrow-prev, .btn-add-picture, 
+#unseen-input-add-picture:hover {
 	cursor: pointer;
 }
 
-.arrow-prev {
-	cursor: pointer;
-}
 
 .gallery-view {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	gap: 2%;
 	padding-bottom: 3rem;
-	border-bottom: 1px solid gray ;
+	border-bottom: 1px solid #B3B3B3 ;
 }
 
 .gallery-view figure {
@@ -363,6 +363,7 @@ footer nav ul {
 }
 
 .card-img {
+	position: relative;
 	width: 100%;
 }
 
@@ -380,7 +381,111 @@ footer nav ul {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: 1rem;
+	gap: 2rem;
+	width: 80%;
+}
+
+.label-add-picture {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.input-add-picture {
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+	background-color: white;
+	height: 3rem;
+}
+
+#btn-form-add-picture {
+	padding: 0.5rem 4rem;
+}
+
+#label-cat {
+	padding-bottom: 3rem;
+	border-bottom: 1px solid #B3B3B3;
+}
+
+.card-trash {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	height: 1.5rem;
+	width: 1.5rem;
+	border-radius: 0.2rem;
+	top: 5%;
+	right: 7%;
+}
+
+.trash, .move {
+	color: white;
+}
+
+.card-move {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	height: 1.5rem;
+	width: 1.5rem;
+	border-radius: 0.2rem;
+	top: 5%;
+	right: 35%;
+}
+
+#box-add-picture {
+	height: 15rem;
+	background-color: #E8F1F6;
+	justify-content: center;
+	align-items: center;
+	gap: 1.5rem;
+	border-radius: 0.3rem;
+	position: relative;
+}
+
+.btn-add-picture {
+	background-color: #CBD6DC;
+	color: #306685;
+	width: 40%;
+	height: 2.5rem;
+	padding: 0.65rem;
+	border: none;
+	border-radius: 1.5rem;
+	font-size: larger;
+	font-weight: 500;
+	pointer-events: none;
+}
+
+#unseen-input-add-picture {
+	position: relative;
+	opacity: 0;
+	width: 112%;
+	height: 215%;
+	bottom: 160%;
+	right: 6%;
+	z-index: 10;
+	pointer-events: all;
+}
+
+#picture-svg {
+	width: 5rem;
+}
+
+.preview-box {
+	position: absolute;
+	height: 100%;
+	max-width: 50%;
+}
+
+#preview-picture {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
 }
 
 /***** Login page *****/

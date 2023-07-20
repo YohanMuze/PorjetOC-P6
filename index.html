@@ -10,7 +10,7 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="https://kit.fontawesome.com/64cdd2c6e2.js" crossorigin="anonymous"></script>
-	<script src="js/index.js" type="module" defer></script>
+	<script src="js/index.js" defer></script>
 </head>
 <body>
 <header id="header">
@@ -44,8 +44,8 @@
 			<p class="modal-title">Galerie photo</p>
 			<div class="gallery-view">
 			</div>
-			<a id="link-add-picture" class="modal-link" href="#modal-add-project" value="Ajouter une photo">Ajouter une photo</a>
-			<a id="delete-gallery">Supprimer la galerie</a>
+			<a id="link-add-picture" class="modal-link" href="#modal-add-project">Ajouter une photo</a>
+			<a id="btn-delete-gallery">Supprimer la galerie</a>
 		</div>
 	</dialog>
 	<dialog id="modal-add-project" href="modal-add-project" class="modal">
@@ -55,20 +55,33 @@
 		</div>
 		<div class="modal-wrapper">
 			<p class="modal-title">Ajout photo</p>
-				<form class="form-add-picture">
-					<label>
-						<input type="file">
-					</label>
-					<label>
-						Titre :
-						<input type="text" title="Titre">
-					</label>
-					<label>
-						Catégorie :
-						<input type="" title="Catégorie">
-					</label>
-				</form>
-			<input type="submit" value="Valider">
+			<form class="form-add-picture" name="add-picture">
+				<label id="box-add-picture" class="label-add-picture">
+					<img id="picture-svg" src="./assets/icons/picture-svgrepo-com.svg" alt="Emplacement d'image vierge">
+					<button class="btn-add-picture" type="button">+ Ajouter photo
+						<input id="unseen-input-add-picture" type="file" accept=".jpg, .png" name="image" required>
+					</button>
+					<p>jpg, png : 4mo max</p>
+					<div class="preview-box">
+						<img id="preview-picture" src="" alt="Prévisualisation de l'image">
+					</div>
+				</label>
+				<label class="label-add-picture">
+					Titre
+					<input id="title" class="input-add-picture" type="text" title="Titre" name="title" required>
+				</label>
+				<label id="label-cat" class="label-add-picture">
+					Catégorie
+					<select id="cat" class="input-add-picture" required name="category">
+						<option value="">Sélectionez une catégorie</option>
+						<option value="1">Objet</option>
+						<option value="2">Appartement</option>
+						<option value="3">Hôtel & Restaurant</option>
+					</select>
+				</label>
+				<input id="btn-form-add-picture" type="submit" value="Valider">
+			</form>
+			
 		</div>
 	</dialog>
 	<section id="portfolio">
