@@ -8,19 +8,19 @@ var submittedPassword = "";
 
 //Functions declaration :
 function checkVar(variable) {
-  if(variable === undefined || variable === null || variable === "") {
+  if (variable === undefined || variable === null || variable === "") {
     throw new Error("Empty field(s)");
   }
 }
 
 function addTextError(errorTxt) {
   document.getElementById("password").insertAdjacentHTML("afterend",
-  `<p id="error" class="error-txt">${errorTxt}</p>`);
+    `<p id="error" class="error-txt">${errorTxt}</p>`);
 }
 
 function removeElement(selector) {
   const errorElement = document.getElementById(selector);
-  if(errorElement !== null) {
+  if (errorElement !== null) {
     errorElement.remove();
   } else {
     return;
@@ -33,12 +33,12 @@ function printError(id, errorTxt) {
 }
 
 //"Se connecter" button :
-buttonLogin.addEventListener("click", function(event) {
+buttonLogin.addEventListener("click", function (event) {
   submittedEmail = document.getElementById("email").value;
   submittedPassword = document.getElementById("password").value;
   let submitted = {
-    email : submittedEmail,
-    password : submittedPassword,
+    email: submittedEmail,
+    password: submittedPassword,
   }
   try {
     checkVar(submittedEmail);
@@ -49,30 +49,30 @@ buttonLogin.addEventListener("click", function(event) {
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       },
-      body: JSON.stringify (submitted)
+      body: JSON.stringify(submitted)
     })
-    .then(response => {
-      switch (response.status) {
-        case 401:
-          printError("error", error401Txt);
-        break;
-        case 404:
-          printError("error", error404Txt);
-        break;
-        case 200:
-          response = response.json();
-          response.then(authentication => {
-            var token = authentication.token;
-            sessionStorage.setItem("logToken", token);
-            document.location.href="./index.html";
-          })
-        break;
-        default: 
-          console.log("une erreur inconnue s'est produite")
+      .then(response => {
+        switch (response.status) {
+          case 401:
+            printError("error", error401Txt);
+            break;
+          case 404:
+            printError("error", error404Txt);
+            break;
+          case 200:
+            response = response.json();
+            response.then(authentication => {
+              var token = authentication.token;
+              sessionStorage.setItem("logToken", token);
+              document.location.href = "./index.html";
+            })
+            break;
+          default:
+            console.log("une erreur inconnue s'est produite")
         }
       })
-    }
-  catch(e) {
+  }
+  catch (e) {
     console.error(e.message);
     printError("error", errorEmptyFieldTxt);
   }

@@ -98,6 +98,7 @@ nav ul {
 	list-style-type: none;
 
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
@@ -107,6 +108,7 @@ a:hover {
 	color: #B1663C;
 	cursor: pointer;
 }
+
 .bold{
 	font-weight: bold;
 }
@@ -139,7 +141,7 @@ a:hover {
 	text-align: center;
 }
 
-/**** Adjustments for logged user ****/
+/*********** Overlay for logged user ************/
 
 #edit-header {
 	display: flex;
@@ -168,14 +170,6 @@ a:hover {
 	font-weight: 300;
 }
 
-#portfolio-header {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	gap: 1rem;
-	margin-top: 8rem;
-}
-
 .modifier {
 	display: flex;
 	flex-direction: row;
@@ -187,7 +181,15 @@ a:hover {
 	margin-left: 5%;
 }
 
-/**** Filters added : ****/
+#portfolio-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 8rem;
+}
+
+/********** Filters added : *************/
 .filters {
 	display: flex;
 	flex-direction: row;
@@ -217,7 +219,7 @@ a:hover {
 	background-color: #1D6154;
 	color: white;
 }
-/*** Filters' end ***/
+/******** Filters' end **********/
 
 .gallery {
 	width: 100%;
@@ -229,19 +231,23 @@ a:hover {
 
 .gallery img {
 	width: 100%;
-
+	min-height: 96.5%;
 }
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
 	margin-top:30px;
@@ -255,9 +261,11 @@ margin: auto;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -284,7 +292,7 @@ footer nav ul {
 	margin: 2em
 }
 
-/***** Edit modal *****/
+/************ Edit modal *************/
 
 .modal {
 	margin-top: 1rem;
@@ -303,23 +311,6 @@ footer nav ul {
 .modal::backdrop {
 	background: rgba(0, 0, 0, 0.6);
 	pointer-events: all;
-}
-
-#link-add-picture {
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
-	margin-top: 1rem;
-	margin-bottom: 0.5rem;
-	padding: 1rem 2rem;
-	text-align: center;
-	border-radius: 60px ;
-}
-
-#btn-delete-gallery {
-	font-family: 'Syne';
-	font-weight: normal;
 }
 
 .modal-header {
@@ -343,12 +334,6 @@ footer nav ul {
 	margin-bottom: 2rem;
 }
 
-.x-close:hover, .arrow-prev, .btn-add-picture, 
-#unseen-input-add-picture:hover {
-	cursor: pointer;
-}
-
-
 .gallery-view {
 	display: flex;
 	flex-direction: row;
@@ -365,46 +350,17 @@ footer nav ul {
 .card-img {
 	position: relative;
 	width: 100%;
+	height: 90%;
 }
 
 .gallery-view img {
 	object-fit: cover;
-	height: auto;
+	min-height: 100%;
 	width: 100%;
 }
 
 .gallery-view p {
 	margin-bottom: 0.5rem;
-}
-
-.form-add-picture {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 2rem;
-	width: 80%;
-}
-
-.label-add-picture {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
-
-.input-add-picture {
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	border: none;
-	background-color: white;
-	height: 3rem;
-}
-
-#btn-form-add-picture {
-	padding: 0.5rem 4rem;
-}
-
-#label-cat {
-	padding-bottom: 3rem;
-	border-bottom: 1px solid #B3B3B3;
 }
 
 .card-trash {
@@ -435,6 +391,53 @@ footer nav ul {
 	border-radius: 0.2rem;
 	top: 5%;
 	right: 35%;
+}
+
+#link-add-picture {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+	padding: 1rem 2rem;
+	text-align: center;
+	border-radius: 60px ;
+	font-size: medium;
+	width: 50%;
+}
+
+#btn-delete-gallery {
+	font-family: 'Syne';
+	font-weight: normal;
+}
+
+.form-add-picture {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2rem;
+	width: 80%;
+}
+
+/********* Add Picture Modal : **********/
+.label-add-picture {
+	display: flex;
+	flex-direction: column;
+	gap: 0.8rem;
+}
+
+.input-add-picture {
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+	background-color: white;
+	height: 3rem;
+}
+
+#label-cat {
+	padding-bottom: 3rem;
+	border-bottom: 1px solid #B3B3B3;
 }
 
 #box-add-picture {
@@ -471,6 +474,22 @@ footer nav ul {
 	pointer-events: all;
 }
 
+#btn-form-add-picture {
+	padding: 0.8rem 2rem;
+	border: none;
+	font-size: medium;
+	width: 50%;
+	background-color: darkgray;
+}
+
+.x-close:hover, .arrow-prev, .btn-add-picture, 
+#unseen-input-add-picture:hover {
+	cursor: pointer;
+}
+
+/************ Preview picture ***********/
+/* Unseen until user added .jpg or .png file */
+
 #picture-svg {
 	width: 5rem;
 }
@@ -482,13 +501,14 @@ footer nav ul {
 }
 
 #preview-picture {
+	display: none;
 	position: relative;
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
 }
 
-/***** Login page *****/
+/********* Login page ************/
 
 .section-login {
 	display: flex;
@@ -498,6 +518,7 @@ footer nav ul {
 
 	
 }
+
 .form-login {
 	display: flex;
 	flex-direction: column;

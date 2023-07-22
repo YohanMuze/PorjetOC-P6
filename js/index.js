@@ -1,24 +1,35 @@
-//Global variables declaration :
+/*********** Global variables declaration : *********/
 var galleryFull = new Array();
+
+//filters' button : 
 const buttonAll = document.querySelector("#btn-all");
 const buttonObject = document.querySelector("#btn-object");
 const buttonAppt = document.querySelector("#btn-appt");
 const buttonHotel = document.querySelector("#btn-hotel");
 const filters = document.querySelectorAll(".filter");
+//Login :
 const loginOut = document.querySelector("#login-logout");
 const buttonLogin = document.querySelector("#login")
+//Modal :
 var modalActive;
 var modalPrev;
 const galleryView = document.querySelector(".gallery-view");
 var addedPicture;
 const formAddPicture = document.forms.namedItem("add-picture");
+const inputAddPicture = document.getElementById("unseen-input-add-picture");
 const preview = document.getElementById("preview-picture");
 const title = document.getElementById("title");
 const cat = document.getElementById("cat");
-const inputAddPicture = document.getElementById("unseen-input-add-picture")
+const btnFormAddPicture = document.getElementById("btn-form-add-picture");
+const hollowBox = document.getElementById("unseen-field");
+var inputsFormAddPicture = [inputAddPicture, title, cat];
+
+const btnsDelete = document.querySelectorAll(".card-trash"); 
+
+/********** functions declaration : **********/
 
 
-//functions declaration :
+/********* Gallery display functions : **********/
 function clearGallery(selector) {
     document.querySelector(selector)
         .innerHTML = ``;
@@ -52,33 +63,6 @@ function fillGallery(arr) {
                 </figure>`;
     }
 }
-
-function removeAllElementFrom(node) {
-    for (const element of node) {
-        element.remove();
-    }
-}
-
-function addTextError(selectId, errorTxt) {
-    const node = document.getElementById(selectId);
-    node.insertAdjacentHTML("beforebegin",
-        `<p id="error" class="error-txt">${errorTxt}</p>`);
-}
-
-function removeElement(selector) {
-    const errorElement = document.getElementById(selector);
-    if (errorElement !== null) {
-        errorElement.remove();
-    } else {
-        return;
-    }
-}
-
-function printError(id, selectId, errorTxt) {
-    removeElement(id);
-    addTextError(selectId, errorTxt);
-}
-
 
 function displayGallery() {
     document.querySelector(".gallery").innerHTML = "";
@@ -118,6 +102,146 @@ function displayGallery() {
         });
 }
 
+/********* End of gallery display functions **********/
+
+/************* Modal's functions : ****************/
+
+function prevModal() {
+    modalPrev.showModal();
+    modalPrev.style.display = "flex";
+    addGalleryView(modalPrev);
+    modalActive.close();
+    modalActive.style.display = null;
+    modalActive = modalPrev;
+}
+
+function closeModal() {
+    modalPrev = modalActive;
+    modalActive.close();
+    modalActive.style.display = null;
+    preview.src = "";
+    preview.style.display = null;
+    inputAddPicture.value = "";
+    title.value = "";
+    cat.value = "";
+    inputAddPicture.style.height = "250%";
+    inputAddPicture.style.bottom = "180%";
+}
+
+function openModal(e) {
+    if (modalActive != null && modalActive != undefined && modalActive != "") {
+        closeModal();
+    }
+    e.preventDefault();
+    const target = document.querySelector(e.target.getAttribute("href"));
+    target.showModal();
+    target.style.display = "flex";
+    addGalleryView(target);
+    deleteWork();
+    btnFormAddPicture.style.backgroundColor = "darkgrey";
+    modalActive = target;
+}
+
+function addGalleryView(modal) {
+    if (modal.id === "modal-gallery") {
+        clearGallery(".gallery-view");
+        for (let i = 0; i < galleryFull.length; i++) {
+            document.querySelector(".gallery-view")
+                .innerHTML += `<figure>
+                        <div class="card-img">
+                            <a id="${galleryFull[i].id}" class="card-trash">
+                                <i class="trash fa-sm fa-solid fa-trash-can"></i>
+                            </a>
+                            <img src="${galleryFull[i].imageUrl}" alt="${galleryFull[i].title}">
+                        </div>
+                        <p>éditer</p>
+                    </figure>`;
+        }
+        let picture1 = galleryView.firstChild;
+        picture1.querySelector(".card-img").innerHTML += `<div class="card-move">
+            <i class="move fa-solid fa-arrows-up-down-left-right"></i>
+        </div>`;
+    }
+}
+
+function renderPreview(e) {
+    const [picture] = e.target.files;
+    if (picture) {
+        preview.src = URL.createObjectURL(picture);
+        preview.style.display = "block";
+        inputAddPicture.style.height = "1250%";
+        inputAddPicture.style.bottom = "850%";
+    }
+    inputAddPicture.addEventListener("change", renderPreview);
+}
+
+/**************** End of modal's functions *************/
+
+function removeAllElementFrom(node) {
+    for (const element of node) {
+        element.remove();
+    }
+}
+
+function addTextError(selectId, errorTxt) {
+    const node = document.getElementById(selectId);
+    node.insertAdjacentHTML("beforebegin",
+        `<p id="error" class="error-txt">${errorTxt}</p>`);
+}
+
+function removeError(selector) {
+    const errorElement = document.getElementById(selector);
+    if (errorElement !== null) {
+        errorElement.remove();
+    } else {
+        return;
+    }
+}
+
+function printError(selector, selectId, errorTxt) {
+    removeError(selector);
+    addTextError(selectId, errorTxt);
+}
+
+
+function deleteWork() {
+    document.querySelectorAll(".card-trash").forEach(i => {
+        i.addEventListener("click", () => {
+            const token = sessionStorage.getItem("logToken");
+            fetch("http://localhost:5678/api/works/" + i.id, {
+                method: 'DELETE',
+                headers: { 
+                    'accept': '*/*',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
+                .then(response => {
+                    switch (response.status) {
+                        case 401:
+                            printError("error", "link-add-picture", "Unauthorized - veuillez vous connecter");
+                            break;
+                        case 500:
+                            printError("error", "link-form-add-picture", "Unexpected Error");
+                            break;
+                        case 204:
+                            fetch("http://localhost:5678/api/works")
+                                .then(data => data.json())
+                                .then(gallery => {
+                                    galleryFull = gallery;
+                                    document.querySelector(".gallery").innerHTML = "";
+                                    fillGallery(gallery);
+                                    addGalleryView(modalActive);
+                                })
+                            break;
+                        default:
+                            console.log("une erreur inconnue s'est produite")
+                    }
+                })
+        })
+    })
+}
+
+
 //Dynamic Gallery display :
 displayGallery();
 
@@ -132,7 +256,7 @@ if (sessionStorage.getItem("logToken")) {
         sessionStorage.removeItem("logToken");
     })
     removeAllElementFrom(filters);
-    document.querySelector("#header").insertAdjacentHTML("afterend",
+    document.querySelector("#header").insertAdjacentHTML("beforeend",
         `<div id="edit-header">
         <div class="modifier">
             <i class="fa-solid fa-pen-to-square"></i>
@@ -176,155 +300,69 @@ if (sessionStorage.getItem("logToken")) {
 
     deleteWork();
 
-    inputAddPicture.addEventListener("change", renderPreview)
-}
+    inputAddPicture.addEventListener("change", renderPreview);
 
-formAddPicture.addEventListener("submit", (event) => {
-    const formData = new FormData(formAddPicture);
-    console.log(formData);
-    event.preventDefault();
-},
-    false,
-);
+    formAddPicture.addEventListener("submit", (e) => {
+        const formData = new FormData(formAddPicture);
+        e.preventDefault();
+    },
+        false,
+    );
 
-formAddPicture.addEventListener("formdata", (e) => {
-    e.preventDefault();
-    console.log("fired");
-    let data = e.formData;
-    for (const value of data.values()) {
-        console.log(value);
-    }
-    const token = sessionStorage.getItem("logToken");
-    console.log(token);
-
-    fetch("http://localhost:5678/api/works", {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'Authorization': 'Bearer ' + token
-        },
-        body: data
+    btnFormAddPicture.addEventListener("click", (e) => {
+        if (inputAddPicture.value != null && inputAddPicture.value != undefined && inputAddPicture.value != ""
+        && title.value != null && title.value != undefined && title.value != ""
+        && cat.value != null && cat.value != undefined && cat.value != "") {
+            removeError("error");
+        } else {
+            e.preventDefault();
+            removeError("error");
+            printError("error", "btn-form-add-picture", "Veuillez remplir tous les champs");
+        }
     })
-        .then(response => {
-            switch (response.status) {
-                case 400:
-                    printError("error", "btn-form-add-picture", "Bad Request");
-                    break;
-                case 401:
-                    printError("error", "btn-form-add-picture", "Unauthorized - veuillez vous connecter");
-                    break;
-                case 500:
-                    printError("error", "btn-form-add-picture", "Unexpected Error");
-                    break;
-                case 201:
-                    closeModal();
-                    displayGallery();
-                    break;
-                default:
-                    console.log("une erreur inconnue s'est produite")
+    inputsFormAddPicture.forEach(input => {
+        input.addEventListener("change", () => {
+            if (inputAddPicture.value != null && inputAddPicture.value != undefined && inputAddPicture.value != ""
+                && title.value != null && title.value != undefined && title.value != ""
+                && cat.value != null && cat.value != undefined && cat.value != "") {
+                btnFormAddPicture.style.backgroundColor = "#1D6154";
+            } else {
+                btnFormAddPicture.style.backgroundColor = "darkgrey";
+                
             }
         })
-})
-
-function deleteWork() {
-    document.querySelectorAll(".card-trash").forEach(i => {
-        i.addEventListener("click", () => {
-            const token = sessionStorage.getItem("logToken");
-            console.log(token);
-    
-            fetch("http://localhost:5678/api/works/" + i.id, {
-                method: 'DELETE',
-                headers: {
-                    'accept': '*/*',
-                    'Authorization': 'Bearer ' + token
-                },
-            })
-                .then(response => {
-                    switch (response.status) {
-                        case 401:
-                            printError("error", "link-add-picture", "Unauthorized - veuillez vous connecter");
-                            break;
-                        case 500:
-                            printError("error", "link-form-add-picture", "Unexpected Error");
-                            break;
-                        case 204:
-                            fetch("http://localhost:5678/api/works")
-                            .then(data => data.json())
-                            .then(gallery => {
-                                    galleryFull = gallery;
-                                    document.querySelector(".gallery").innerHTML = "";
-                                    fillGallery(gallery);
-                                    addGalleryView(modalActive);})
-                            break;
-                        default:
-                            console.log("une erreur inconnue s'est produite")
-                    }
-                })
-        })
     })
-}
 
-function renderPreview(e) {
-    const [picture] = e.target.files;
-    if (picture) {
-        preview.src = URL.createObjectURL(picture);
-        inputAddPicture.style.height = "1250%";
-        inputAddPicture.style.bottom = "850%";
-    }
-    inputAddPicture.addEventListener("change", renderPreview);
-}
-
-function prevModal() {
-    modalPrev.showModal();
-    modalPrev.style.display = "flex";
-    addGalleryView(modalPrev);
-    modalActive.close();
-    modalActive.style.display = null;
-    modalActive = modalPrev;
-}
-
-function closeModal() {
-    modalPrev = modalActive;
-    modalActive.close();
-    modalActive.style.display = null;
-    preview.src = "";
-    title.value = "";
-    cat.value = "";
-    inputAddPicture.style.height = "250%";
-    inputAddPicture.style.bottom = "180%";
-}
-
-function openModal(e) {
-    if (modalActive != null && modalActive != undefined && modalActive != "") {
-        closeModal();
-    }
-    e.preventDefault();
-    const target = document.querySelector(e.target.getAttribute("href"));
-    target.showModal();
-    target.style.display = "flex";
-    addGalleryView(target);
-    deleteWork();
-    modalActive = target;
-}
-
-function addGalleryView(modal) {
-    if (modal.id === "modal-gallery") {
-        clearGallery(".gallery-view");
-        for (let i = 0; i < galleryFull.length; i++) {
-            document.querySelector(".gallery-view")
-                .innerHTML += `<figure>
-                        <div class="card-img">
-                            <a id="${galleryFull[i].id}" class="card-trash">
-                                <i class="trash fa-sm fa-solid fa-trash-can"></i>
-                            </a>
-                            <img src="${galleryFull[i].imageUrl}" alt="${galleryFull[i].title}">
-                        </div>
-                        <p>éditer</p>
-                    </figure>`;
-        }
-        let picture1 = galleryView.firstChild;
-        picture1.querySelector(".card-img").innerHTML += `<div class="card-move">
-            <i class="move fa-solid fa-arrows-up-down-left-right"></i>
-        </div>`;
-    }
+    formAddPicture.addEventListener("formdata", (e) => {
+        e.preventDefault();
+        let data = e.formData;
+        const token = sessionStorage.getItem("logToken");
+        fetch("http://localhost:5678/api/works", {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: data
+        })
+            .then(response => {
+                switch (response.status) {
+                    case 400:
+                        printError("error", "btn-form-add-picture", "Bad Request");
+                        break;
+                    case 401:
+                        printError("error", "btn-form-add-picture", "Unauthorized - veuillez vous connecter");
+                        break;
+                    case 500:
+                        printError("error", "btn-form-add-picture", "Unexpected Error");
+                        break;
+                    case 201:
+                        closeModal();
+                        displayGallery();
+                        break;
+                    default:
+                        console.log("une erreur inconnue s'est produite")
+                }
+            })
+    })
 }
