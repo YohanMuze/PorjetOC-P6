@@ -7,10 +7,12 @@ const buttonObject = document.querySelector("#btn-object");
 const buttonAppt = document.querySelector("#btn-appt");
 const buttonHotel = document.querySelector("#btn-hotel");
 const filters = document.querySelectorAll(".filter");
+
 //Login :
 const loginOut = document.querySelector("#login-logout");
 const buttonLogin = document.querySelector("#login")
-//Modal :
+
+//Modals :
 var modalActive;
 var modalPrev;
 const galleryView = document.querySelector(".gallery-view");
@@ -115,17 +117,25 @@ function prevModal() {
     modalActive = modalPrev;
 }
 
-function closeModal() {
-    modalPrev = modalActive;
-    modalActive.close();
-    modalActive.style.display = null;
+function clearForm() {
     preview.src = "";
     preview.style.display = null;
     inputAddPicture.value = "";
     title.value = "";
     cat.value = "";
-    inputAddPicture.style.height = "250%";
-    inputAddPicture.style.bottom = "180%";
+}
+
+function closeModal() {
+    modalPrev = modalActive;
+    modalActive.close();
+    modalActive.style.display = null;
+    clearForm();
+}
+
+function filterClassJS(arr) {
+    return arr.filter(function (target) {
+        return target.indexOf("modal");
+    })
 }
 
 function openModal(e) {
@@ -133,13 +143,21 @@ function openModal(e) {
         closeModal();
     }
     e.preventDefault();
-    const target = document.querySelector(e.target.getAttribute("href"));
-    target.showModal();
-    target.style.display = "flex";
-    addGalleryView(target);
-    deleteWork();
+    const target = Object.values(e.target.classList);
+    const filteredTarget = filterClassJS(target);
+    const dialogBox = document.querySelectorAll("dialog");
+    console.log(dialogBox);
+    let filteredBox; 
+    dialogBox.forEach(el => {
+        if(el.classList.contains(filteredTarget[0]) === true) {
+            return filteredBox = el
+        }
+    });
+    filteredBox.showModal();
+    filteredBox.style.display = "flex";
+    addGalleryView(filteredBox);
     btnFormAddPicture.style.backgroundColor = "darkgrey";
-    modalActive = target;
+    modalActive = filteredBox;
 }
 
 function addGalleryView(modal) {
@@ -149,8 +167,8 @@ function addGalleryView(modal) {
             document.querySelector(".gallery-view")
                 .innerHTML += `<figure>
                         <div class="card-img">
-                            <a id="${galleryFull[i].id}" class="card-trash">
-                                <i class="trash fa-sm fa-solid fa-trash-can"></i>
+                            <a class="card-trash" tabindex="0">
+                                <i id="${galleryFull[i].id}" class="trash fa-sm fa-solid fa-trash-can"></i>
                             </a>
                             <img src="${galleryFull[i].imageUrl}" alt="${galleryFull[i].title}">
                         </div>
@@ -158,7 +176,7 @@ function addGalleryView(modal) {
                     </figure>`;
         }
         let picture1 = galleryView.firstChild;
-        picture1.querySelector(".card-img").innerHTML += `<div class="card-move">
+        picture1.querySelector(".card-img").innerHTML += `<div class="card-move" tabindex="0">
             <i class="move fa-solid fa-arrows-up-down-left-right"></i>
         </div>`;
     }
@@ -169,46 +187,14 @@ function renderPreview(e) {
     if (picture) {
         preview.src = URL.createObjectURL(picture);
         preview.style.display = "block";
-        inputAddPicture.style.height = "1250%";
-        inputAddPicture.style.bottom = "850%";
     }
     inputAddPicture.addEventListener("change", renderPreview);
 }
 
-/**************** End of modal's functions *************/
-
-function removeAllElementFrom(node) {
-    for (const element of node) {
-        element.remove();
-    }
-}
-
-function addTextError(selectId, errorTxt) {
-    const node = document.getElementById(selectId);
-    node.insertAdjacentHTML("beforebegin",
-        `<p id="error" class="error-txt">${errorTxt}</p>`);
-}
-
-function removeError(selector) {
-    const errorElement = document.getElementById(selector);
-    if (errorElement !== null) {
-        errorElement.remove();
-    } else {
-        return;
-    }
-}
-
-function printError(selector, selectId, errorTxt) {
-    removeError(selector);
-    addTextError(selectId, errorTxt);
-}
-
-
-function deleteWork() {
-    document.querySelectorAll(".card-trash").forEach(i => {
-        i.addEventListener("click", () => {
+function deleteWork(id) {
+    console.log("enter");
             const token = sessionStorage.getItem("logToken");
-            fetch("http://localhost:5678/api/works/" + i.id, {
+            fetch("http://localhost:5678/api/works/" + id, {
                 method: 'DELETE',
                 headers: { 
                     'accept': '*/*',
@@ -237,9 +223,37 @@ function deleteWork() {
                             console.log("une erreur inconnue s'est produite")
                     }
                 })
-        })
-    })
 }
+/**************** End of modal's functions *************/
+
+/************** Errors feature functions **************/
+function removeAllElementFrom(node) {
+    for (const element of node) {
+        element.remove();
+    }
+}
+
+function addTextError(selectId, errorTxt) {
+    const node = document.getElementById(selectId);
+    node.insertAdjacentHTML("beforebegin",
+        `<p id="error" class="error-txt">${errorTxt}</p>`);
+}
+
+function removeError(selector) {
+    const errorElement = document.getElementById(selector);
+    if (errorElement !== null) {
+        errorElement.remove();
+    } else {
+        return;
+    }
+}
+
+function printError(selector, selectId, errorTxt) {
+    removeError(selector);
+    addTextError(selectId, errorTxt);
+}
+
+
 
 
 //Dynamic Gallery display :
@@ -267,7 +281,7 @@ if (sessionStorage.getItem("logToken")) {
     document.querySelector("#portfolio-header").insertAdjacentHTML("beforeend",
         `<div class="modifier">
         <i class="fa-solid fa-pen-to-square"></i>
-        <a class="modal-link" href="#modal-gallery">Modifier</a>
+        <a class="modal-link js-modal-gallery" href="#modal-gallery">Modifier</a>
     </div>`)
     document.querySelector("#introduction").insertAdjacentHTML("afterend",
         `<div id="modifier-introduction" class="modifier">
@@ -276,21 +290,28 @@ if (sessionStorage.getItem("logToken")) {
     </div>`)
 
 
-    //Modals Events
+    /****** Modals Events*****/
+    //Navigation with link inside modals
     document.querySelectorAll(".modal-link").forEach(a => {
         a.addEventListener("click", (openModal))
     })
-
+    //Close button
     document.querySelectorAll(".x-close").forEach(i => {
         i.addEventListener("click", (closeModal))
     })
-
+    //Previous button
     document.querySelectorAll(".arrow-prev").forEach(i => {
         i.addEventListener("click", (prevModal))
     })
-
+    //Delete element from gallery & close by clicking outside of modal
     document.querySelectorAll(".modal").forEach(modal => {
         modal.addEventListener("click", (e) => {
+            let trash = e.target.classList.contains("trash");
+            if (trash === true) {
+                let id = e.target.id;
+                console.log(id);
+                deleteWork(id);
+            }
             if (e.target === modalActive) {
                 modalActive.close();
                 modalActive.style.display = null;
@@ -298,16 +319,9 @@ if (sessionStorage.getItem("logToken")) {
         });
     })
 
-    deleteWork();
 
+    /***** Add picture input & Preview picture *****/
     inputAddPicture.addEventListener("change", renderPreview);
-
-    formAddPicture.addEventListener("submit", (e) => {
-        const formData = new FormData(formAddPicture);
-        e.preventDefault();
-    },
-        false,
-    );
 
     btnFormAddPicture.addEventListener("click", (e) => {
         if (inputAddPicture.value != null && inputAddPicture.value != undefined && inputAddPicture.value != ""
@@ -332,6 +346,15 @@ if (sessionStorage.getItem("logToken")) {
             }
         })
     })
+
+
+    /******** Add work form *******/
+    formAddPicture.addEventListener("submit", (e) => {
+        const formData = new FormData(formAddPicture);
+        e.preventDefault();
+    },
+        false,
+    );
 
     formAddPicture.addEventListener("formdata", (e) => {
         e.preventDefault();

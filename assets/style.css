@@ -376,6 +376,10 @@ footer nav ul {
 	right: 7%;
 }
 
+.trash {
+	padding: 0.7rem 0.5rem;
+}
+
 .trash, .move {
 	color: white;
 }
@@ -454,22 +458,23 @@ footer nav ul {
 	background-color: #CBD6DC;
 	color: #306685;
 	width: 40%;
-	height: 2.5rem;
-	padding: 0.65rem;
-	border: none;
+	height: 1.5rem;
+	padding: 0.8rem 0.6rem 0.5rem;
 	border-radius: 1.5rem;
 	font-size: larger;
 	font-weight: 500;
+	text-align: center;
 	pointer-events: none;
 }
 
 #unseen-input-add-picture {
-	position: relative;
+	position: absolute;
 	opacity: 0;
-	width: 112%;
-	height: 215%;
-	bottom: 160%;
-	right: 6%;
+	width: 50%;
+	top: 0;
+	height: 100%;
+	bottom: 25%;
+	right: 25%;
 	z-index: 10;
 	pointer-events: all;
 }
