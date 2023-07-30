@@ -22,14 +22,11 @@ const inputAddPicture = document.getElementById("unseen-input-add-picture");
 const preview = document.getElementById("preview-picture");
 const title = document.getElementById("title");
 const cat = document.getElementById("cat");
+const inputsFormAddPicture = [inputAddPicture, title, cat];
 const btnFormAddPicture = document.getElementById("btn-form-add-picture");
-const hollowBox = document.getElementById("unseen-field");
-var inputsFormAddPicture = [inputAddPicture, title, cat];
 
-const btnsDelete = document.querySelectorAll(".card-trash"); 
 
 /********** functions declaration : **********/
-
 
 /********* Gallery display functions : **********/
 function clearGallery(selector) {
@@ -146,19 +143,19 @@ function openModal(e) {
     const target = Object.values(e.target.classList);
     const filteredTarget = filterClassJS(target);
     const dialogBox = document.querySelectorAll("dialog");
-    console.log(dialogBox);
-    let filteredBox; 
+    let modalTarget; 
     dialogBox.forEach(el => {
         if(el.classList.contains(filteredTarget[0]) === true) {
-            return filteredBox = el
+            return modalTarget = el
         }
     });
-    filteredBox.showModal();
-    filteredBox.style.display = "flex";
-    addGalleryView(filteredBox);
+    modalTarget.showModal();
+    modalTarget.style.display = "flex";
+    addGalleryView(modalTarget);
     btnFormAddPicture.style.backgroundColor = "darkgrey";
-    modalActive = filteredBox;
+    modalActive = modalTarget;
 }
+
 
 function addGalleryView(modal) {
     if (modal.id === "modal-gallery") {
@@ -252,8 +249,6 @@ function printError(selector, selectId, errorTxt) {
     removeError(selector);
     addTextError(selectId, errorTxt);
 }
-
-
 
 
 //Dynamic Gallery display :
